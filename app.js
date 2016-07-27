@@ -1,10 +1,6 @@
 var Bookshelf = require('bookshelf')
 var ContinuationLocalStorage = require('continuation-local-storage')
 
-// Monkey-patch Bluebird
-var Promise = require('bluebird');
-var clsBluebird = require('cls-bluebird');
-
 var knex = require('knex')({
   client: 'mysql',
   connection: {
@@ -33,7 +29,11 @@ var promise = async function() {
 // Setup CLS
 var transactionId = require('uuid').v4()
 var namespace = ContinuationLocalStorage.createNamespace('namespace')
-clsBluebird(namespace)
+
+// Monkey-patch Bluebird
+var Promise = require('bluebird');
+var clsBluebird = require('cls-bluebird');
+clsBluebird(namespace, Promise)
 
 namespace.run(() => {
 
